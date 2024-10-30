@@ -11,11 +11,27 @@ pygame.display.set_caption("snake")
 
 snake = [[num_blocks // 2 - 1, num_blocks // 2]]
 
+apple_get = 0
+
 
 def move():
     diectoin = pygame.key.get_pressed()
     if diectoin[pygame.K_d]:
-        snake.insert(0, [snake[0][0]+1, snake[0][0]])
+        snake.insert(0, [snake[0][0]+1, snake[0][1]])
+        if apple_get != 1:
+            snake.pop()
+    if diectoin[pygame.K_a]:
+        snake.insert(0, [snake[0][0]-1, snake[0][1]])
+        if apple_get != 1:
+            snake.pop()
+    if diectoin[pygame.K_w]:
+        snake.insert(0, [snake[0][0], snake[0][1]-1])
+        if apple_get != 1:
+            snake.pop()
+    if diectoin[pygame.K_s]:
+        snake.insert(0, [snake[0][0], snake[0][1]+1])
+        if apple_get != 1:
+            snake.pop()
 
 
 running = True
@@ -33,5 +49,5 @@ while running:
                          (x * distance, y * distance, distance, distance))
 
     pygame.display.flip()
-    time.sleep(1)
+    time.sleep(.1)
 pygame.quit()
