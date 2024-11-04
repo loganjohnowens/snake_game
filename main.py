@@ -52,12 +52,23 @@ def apple():
     global apple_get
     global apple_loc_x
     global apple_loc_y
+    global snake
     if apple_get == 1:
-        apple_loc_x = random.randint(0, num_blocks)
-        apple_loc_y = random.randint(0, num_blocks)
+        apple_loc_x = random.randint(0, num_blocks - 1)
+        apple_loc_y = random.randint(0, num_blocks - 1)
         apple_get = 0
-    pygame.draw.rect(screen, (225, 0, 0),
-                     (apple_loc_x * distance, apple_loc_y * distance, distance, distance))
+    if snake[0] == [apple_loc_x, apple_loc_y]:
+        apple_get = 1
+
+
+def snake_run_in():
+    global snake
+    number = 0
+    for i in snake:
+        if i == snake[0] and number == 1:
+            return False
+        number = 1
+    return True
 
 
 running = True
@@ -65,16 +76,17 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
     screen.fill((0, 0, 0))
     diecoin = move(False, diecoin)
+    pygame.draw.rect(screen, (225, 0, 0),
+                     (apple_loc_x * distance, apple_loc_y * distance, distance - 1, distance - 1))
 
     for segment in snake:
         x, y = segment
         pygame.draw.rect(screen, (0, 225, 0), (x * distance,
-                         y * distance, distance, distance))
+                         y * distance, distance - 1, distance - 1))
     apple()
+    running = snake_run_in()
     pygame.display.flip()
     time.sleep(0.25)
-
 pygame.quit()
