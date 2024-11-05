@@ -71,6 +71,20 @@ def snake_run_in():
     return True
 
 
+def walls():
+    global snake
+    global num_blocks
+    if snake[0][0] < 1:
+        return False
+    if snake[0][1] < 1:
+        return False
+    if snake[0][0] > num_blocks - 2:
+        return False
+    if snake[0][1] > num_blocks - 2:
+        return False
+    return True
+
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -87,6 +101,7 @@ while running:
                          y * distance, distance - 1, distance - 1))
     apple()
     running = snake_run_in()
+    running = walls()
     pygame.display.flip()
     time.sleep(0.25)
 pygame.quit()
