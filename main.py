@@ -10,7 +10,7 @@ num_blocks = screen_size // distance
 screen = pygame.display.set_mode((screen_size, screen_size))
 pygame.display.set_caption("Snake Game")
 
-snake = [[num_blocks // 2 - 1, num_blocks // 2]]
+snake = [[num_blocks // 2 - 5, num_blocks // 2]]
 apple_get = 0
 apple_loc_x = (num_blocks // 2 + 2)
 apple_loc_y = (num_blocks // 2)
@@ -74,13 +74,13 @@ def snake_run_in():
 def walls():
     global snake
     global num_blocks
-    if snake[0][0] < 1:
+    if snake[0][0] < 0:
         return False
-    if snake[0][1] < 1:
+    if snake[0][1] < 0:
         return False
-    if snake[0][0] > num_blocks - 2:
+    if snake[0][0] > num_blocks - 1:
         return False
-    if snake[0][1] > num_blocks - 2:
+    if snake[0][1] > num_blocks - 1:
         return False
     return True
 
