@@ -100,8 +100,10 @@ while running:
         pygame.draw.rect(screen, (0, 225, 0), (x * distance,
                          y * distance, distance - 1, distance - 1))
     apple()
-    running = snake_run_in()
+    running_one = snake_run_in()
     running = walls()
+    if running_one is False:
+        running = False
     pygame.display.flip()
     time.sleep(0.25)
 pygame.quit()
