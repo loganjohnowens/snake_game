@@ -95,84 +95,84 @@ def bot_move():
     global apple_get
     print(apple_loc_x, apple_loc_y)
     new_potential_loc = []
+    wall_new_potential_loc = []
     potential_loc = [[snake[0][0] + 1, snake[0][1]], [snake[0][0] - 1, snake[0][1]],
                      [snake[0][0], snake[0][1] + 1], [snake[0][0], snake[0][1] - 1]]
     for i in potential_loc:
+        skip = [False, False, False, False]
         check = []
         check.append(i)
         check.append(['why are you reading this'])
-        new_potential_loc.append(walls(check))
+        wall_new_potential_loc.append(walls(check))
         new_potential_loc.append(snake_run_in(i))
-    if new_potential_loc[0] is False or new_potential_loc[4] is False:
+    if wall_new_potential_loc[0] is False:
         new_potential_loc[0] = False
-    if new_potential_loc[1] is False or new_potential_loc[5] is False:
+    if wall_new_potential_loc[1] is False:
         new_potential_loc[1] = False
-    if new_potential_loc[2] is False or new_potential_loc[6] is False:
+    if wall_new_potential_loc[2] is False:
         new_potential_loc[2] = False
-    if new_potential_loc[3] is False or new_potential_loc[7] is False:
+    if wall_new_potential_loc[3] is False:
         new_potential_loc[3] = False
-    new_potential_loc = new_potential_loc[:-4]
     best_number = 0
     done = 0
     super_done = 0
-    if potential_loc[0][0] == apple_loc_x and apple_loc_y == potential_loc[0][1]:
+    if potential_loc[0][0] == apple_loc_x and apple_loc_y == potential_loc[0][1] and new_potential_loc[0] is True:
         super_done = 1
         best_number = 0
         done = 1
-    if potential_loc[1][0] == apple_loc_x and apple_loc_y == potential_loc[1][1]:
+    if potential_loc[1][0] == apple_loc_x and apple_loc_y == potential_loc[1][1] and new_potential_loc[1] is True:
         super_done = 1
         best_number = 1
         done = 1
-    if potential_loc[2][0] == apple_loc_x and apple_loc_y == potential_loc[2][1]:
+    if potential_loc[2][0] == apple_loc_x and apple_loc_y == potential_loc[2][1] and new_potential_loc[2] is True:
         super_done = 1
         best_number = 2
         done = 1
-    if potential_loc[3][0] == apple_loc_x and apple_loc_y == potential_loc[3][1]:
+    if potential_loc[3][0] == apple_loc_x and apple_loc_y == potential_loc[3][1] and new_potential_loc[3] is True:
         super_done = 1
         best_number = 3
         done = 1
-    numbers = -1
-    for i in potential_loc:
-        numbers += 1
-        if i[0] == apple_loc_x and numbers < 2:
-            best_number = numbers
-            super_done = 1
-            done = 1
-        if i[1] == apple_loc_y and numbers > 1:
-            best_number = numbers
-            super_done = 1
-            done = 1
-    print(super_done)
-    if done != 1 and potential_loc[0][0] < apple_loc_x:
+    number = -1
+    if super_done != 1:
+        for i in potential_loc:
+            number += 1
+            if number == 0 and i[0] == apple_loc_x or number == 1 and i[0] == apple_loc_x:
+                skip[number] = True
+                potential_loc[number] = 0
+            if number == 2 and i[1] == apple_loc_y or number == 3 and i[1] == apple_loc_y:
+                skip[number] = True
+                potential_loc[number] = 0
+    if skip[0] is not True and done != 1 and potential_loc[0][0] < apple_loc_x:
         potential_loc[0] = apple_loc_x - potential_loc[0][0]
         done = 1
-    if done != 1 and potential_loc[0][0] > apple_loc_x:
+    if skip[0] is not True and done != 1 and potential_loc[0][0] > apple_loc_x:
         potential_loc[0] = potential_loc[0][0] - apple_loc_x
     if super_done != 1:
         done = 0
-    if done != 1 and potential_loc[1][0] < apple_loc_x:
+    if skip[1] is not True and done != 1 and potential_loc[1][0] < apple_loc_x:
         potential_loc[1] = apple_loc_x - potential_loc[1][0]
         done = 1
-    if done != 1 and potential_loc[1][0] > apple_loc_x:
+    if skip[1] is not True and done != 1 and potential_loc[1][0] > apple_loc_x:
         potential_loc[1] = potential_loc[1][0] - apple_loc_x
     if super_done != 1:
         done = 0
-    if done != 1 and potential_loc[2][1] < apple_loc_y:
+    if skip[2] is not True and done != 1 and potential_loc[2][1] < apple_loc_y:
         potential_loc[2] = apple_loc_y - potential_loc[2][1]
         done = 1
-    if done != 1 and potential_loc[2][1] > apple_loc_y:
+    if skip[2] is not True and done != 1 and potential_loc[2][1] > apple_loc_y:
         potential_loc[2] = potential_loc[2][1] - apple_loc_y
     if super_done != 1:
         done = 0
-    if done != 1 and potential_loc[3][1] < apple_loc_y:
+    if skip[3] is not True and done != 1 and potential_loc[3][1] < apple_loc_y:
         potential_loc[3] = apple_loc_y - potential_loc[3][1]
         done = 1
-    if done != 1 and potential_loc[3][1] > apple_loc_y:
+    if skip[3] is not True and done != 1 and potential_loc[3][1] > apple_loc_y:
         potential_loc[3] = potential_loc[3][1] - apple_loc_y
+    print(f'after trans pot {potential_loc}')
+    print(f'new {new_potential_loc}')
     best = 1000
     number = -1
     if super_done != 1:
-        print(potential_loc)
         for i in potential_loc:
             number += 1
             if i < best and new_potential_loc[number] is True:
@@ -182,6 +182,13 @@ def bot_move():
                 if number > 1 and snake[0][1] != apple_loc_y:
                     best = i
                     best_number = number
+                if number < 2 and new_potential_loc[0] is False and new_potential_loc[1] is False:
+                    best = i
+                    best_number = number
+                if number > 1 and new_potential_loc[2] is False and new_potential_loc[3] is False:
+                    best = i
+                    best_number = number
+
     if best_number == 0:
         snake.insert(0, [snake[0][0] + 1, snake[0][1]])
     if best_number == 1:
@@ -192,6 +199,7 @@ def bot_move():
         snake.insert(0, [snake[0][0], snake[0][1] - 1])
     if apple_get == 0:
         snake.pop()
+    super_done = 0
 
 
 running = True
