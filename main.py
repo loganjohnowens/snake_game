@@ -16,11 +16,29 @@ apple_loc_x = (num_blocks // 2 + 2)
 apple_loc_y = (num_blocks // 2)
 move_state = [False] * 323
 move_state[pygame.K_d] = True
-diecoin = pygame.K_d
+direction = pygame.K_d
 mode = input('''what mode would you like to play:
         to watch ai press 1
         to play press 2
+        to Quit press 3
         >''')
+if mode == '1':
+    time_stamp = .1
+elif mode == '2':
+    time_stamp = .25
+else:
+    while mode != '3':
+        mode = input('''what mode would you like to play:
+        to watch ai press 1
+        to play press 2
+        to Quit press 3
+        >''')
+        if mode == '1':
+            time_stamp = .1
+            break
+        if mode == '2':
+            time_stamp = .25
+            break
 
 
 def move(second_loop, diecoin):
@@ -93,7 +111,6 @@ def bot_move():
     global apple_loc_y
     global apple_loc_x
     global apple_get
-    print(apple_loc_x, apple_loc_y)
     new_potential_loc = []
     wall_new_potential_loc = []
     potential_loc = [[snake[0][0] + 1, snake[0][1]], [snake[0][0] - 1, snake[0][1]],
@@ -113,7 +130,6 @@ def bot_move():
         new_potential_loc[2] = False
     if wall_new_potential_loc[3] is False:
         new_potential_loc[3] = False
-    print(f'before {potential_loc}')
     best_number = 0
     done = 0
     super_done = 0
@@ -169,8 +185,6 @@ def bot_move():
         done = 1
     if skip[3] is not True and done != 1 and potential_loc[3][1] > apple_loc_y:
         potential_loc[3] = potential_loc[3][1] - apple_loc_y
-    print(f'after trans pot {potential_loc}')
-    print(f'new {new_potential_loc}')
     best = 1000
     number = -1
     if super_done != 1:
@@ -203,14 +217,17 @@ def bot_move():
     super_done = 0
 
 
-running = True
+if mode != '3':
+    running = True
+else:
+    running = False
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
     screen.fill((0, 0, 0))
     if mode == '2':
-        diecoin = move(False, diecoin)
+        direction = move(False, direction)
         apple()
     pygame.draw.rect(screen, (225, 0, 0),
                      (apple_loc_x * distance, apple_loc_y * distance, distance - 1, distance - 1))
@@ -226,5 +243,5 @@ while running:
     if running_one is False:
         running = False
     pygame.display.flip()
-    time.sleep(0.1)
+    time.sleep(time_stamp)
 pygame.quit()
