@@ -113,6 +113,7 @@ def bot_move():
         new_potential_loc[2] = False
     if wall_new_potential_loc[3] is False:
         new_potential_loc[3] = False
+    print(f'before {potential_loc}')
     best_number = 0
     done = 0
     super_done = 0
@@ -182,10 +183,10 @@ def bot_move():
                 if number > 1 and snake[0][1] != apple_loc_y:
                     best = i
                     best_number = number
-                if number < 2 and new_potential_loc[0] is False and new_potential_loc[1] is False:
+                if number < 2 and new_potential_loc[2] is False and new_potential_loc[3] is False:
                     best = i
                     best_number = number
-                if number > 1 and new_potential_loc[2] is False and new_potential_loc[3] is False:
+                if number > 1 and new_potential_loc[0] is False and new_potential_loc[1] is False:
                     best = i
                     best_number = number
 
@@ -225,5 +226,5 @@ while running:
     if running_one is False:
         running = False
     pygame.display.flip()
-    time.sleep(0.25)
+    time.sleep(0.1)
 pygame.quit()
